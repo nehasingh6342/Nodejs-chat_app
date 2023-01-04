@@ -9,29 +9,34 @@ socket.on('disconnect', function(){
 })
 
 socket.on('newmessage', function (message) {
-    console.log('newmessage==>',message);
-    let li = document.createElement('li');
-    li.innerText = `${message.from}:${message.text}`
+    const formatedTime = moment(message.createdAt).format('LT')
+    const template = document.querySelector('#message-template').innerHTML;
+    const html = Mustache.render(template,{
+        from: message.from,
+        text: message.text,
+        createdAt: formatedTime
+    });
+    const div = document.createElement('div');
+    div.innerHTML = html
 
-    document.querySelector('body').appendChild(li);
+    document.querySelector('#messages').appendChild(div);
+    // scrollToBottom();
+
 })
-// socket.emit('createmessage',{
-//     from:'Neha',
-//     text:'heyy'
-// }, function(message){
-//     console.log(message, 'server got it...');
-// }); 
 
 socket.on('newLocationmessage', function (message) {
+    const formatedTime = moment(message.createdAt).format('LT')
     console.log('newLocationmessage==>',message);
-    let li = document.createElement('li');
-    let a = document.createElement('a');
-    a.setAttribute('target','_blank');
-    a.setAttribute('href',message.url);
-    a.innerText = 'My current Location'
-    li.appendChild(a);
-
-    document.querySelector('body').appendChild(li);
+    const template = document.querySelector('#location-message-template').innerHTML;
+    const html = Mustache.render(template, {
+      from: message.from,
+      url: message.url,
+      createdAt: formatedTime
+    });
+    const div = document.createElement('div');
+    div.innerHTML = html
+    document.querySelector('#messages').appendChild(div);
+    // scrollToBottom();
 });
 
 
@@ -41,6 +46,7 @@ document.querySelector('#submitbtn').addEventListener('click', function(e){
         from:'User',
         text: document.querySelector('input[name="message"]').value
     }, function (){
+        document.querySelector('input[name="message"]').value = '';
     })
 })
 document.querySelector('#send_location').addEventListener('click', function(e){

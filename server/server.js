@@ -24,7 +24,7 @@ io.on('connection', (socket)=>{
     //     createdAt:new Date().getTime()
     // });
 
-    socket.emit('newmessage',generateMessage('Admin', 'welcome to the Chat app!!!!'));
+    socket.emit('newmessage',generateMessage('Admin', 'welcome to the Chat app!'));
 
     // socket.broadcast.emit('newmessage',{
     //     from:'Admin',
